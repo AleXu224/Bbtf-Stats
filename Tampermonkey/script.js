@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Backpack.tf Stats Scanner
 // @namespace    http://tampermonkey.net/
-// @version      1.0.5
+// @version      1.0.6
 // @description  try to take over tf2's economy!
 // @author       Squizel
 // @include      https://backpack.tf/stats/*
@@ -9,7 +9,12 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
+    var options = {
+        disable_market_trends:true,
+        disable_graph:true,
+        disable_annoying_ad:true
+    };
+
     // Quality list
     var qualities = [];
     qualities[0] = {name: "Normal"};
@@ -78,9 +83,22 @@
     console.log(`The craftable stat is ${craftable}`);
     console.log(`The australium stat is ${australium}`);
 	console.log(`The killstreak stat is ${killstreak}`);
-	
+
 	//adding the button
 	var x = document.getElementsByClassName("price-boxes");
-	x[0].innerHTML += `<a target="_blank" class="price-box" href="http://localhost/additem/?name=${name}&quality=${quality}&craftable=${craftable}&australium=${australium}&killstreak=${killstreak}" onclick="additem()" style="height:51px;"><div class="icon"><i class="stm stm-steamrep"></i></div><div class="text"><div class="value">Add item</div></div></a>`;
+	x[0].innerHTML += `<a target="_blank" class="price-box" href="http://localhost/additem/?name=${name}&quality=${quality}&craftable=${craftable}&australium=${australium}&killstreak=${killstreak}" onclick="additem()" style="height:51px;"><div class="icon"><i class="fa fa-plus"></i></div><div class="text"><div class="value">Add item</div></div></a>`;
 
+    //Some other stuff
+    if (options.disable_market_trends){
+        document.getElementsByClassName("market-trends-wrapper")[0].style.display = "none";
+    }
+    if (options.disable_graph){
+        document.getElementsByClassName("guttered")[0].style.display = "none";
+    }
+    if (options.disable_annoying_ad){
+        document.getElementsByClassName("col-md-4")[0].style.display = "none";
+        var top = document.getElementsByClassName("stats-panel")[0];
+        top.classList.remove("col-md-8");
+        top.classList.add("col-md-12");
+    }
 })();
